@@ -66,11 +66,11 @@ while run:
 #inputs to move character
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_LEFT or pygame.K_a] and x > velocity:
+    if keys[pygame.K_LEFT] and x > velocity:
         x -= velocity
         left = True
         right = False
-    elif keys[pygame.K_RIGHT or pygame.K_d] and x < screen_width - width - velocity :
+    elif keys[pygame.K_RIGHT] and x < screen_width - width - velocity :
         x += velocity
         left = False
         right = True
