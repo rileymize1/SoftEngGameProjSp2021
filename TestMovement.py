@@ -1,24 +1,66 @@
 import pygame
 pygame.init()
 #window setup
-win = pygame.display.set_mode((600,600))
-screen_width = 600
+win = pygame.display.set_mode((500, 480))
+screen_width = 500
 #window name
 pygame.display.set_caption("Practice Game")
 #charachters location and values
-x = 10
-y = 10
-width = 10
-height = 10
-velocity = 3
+walkRight = [pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R1.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R2.png'),
+             pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R3.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R4.png'),
+             pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R5.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R6.png'),
+             pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R7.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R8.png'),
+             pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R9.png')]
+walkLeft = [pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L1.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L2.png'),
+            pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L3.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L4.png'),
+            pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L5.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L6.png'),
+            pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L7.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L8.png'),
+            pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L9.png')]
+bg = pygame.image.load(r'C:\Users\Riley\Downloads\sprites\dun.jpg')
+char = pygame.image.load(r'C:\Users\Riley\Downloads\sprites\standing.png')
+
+
+x = 50
+y = 400
+width = 64
+height = 64
+velocity = 5
+
+clock = pygame.time.Clock()
 
 isJump = False
-jumpCount = 5
+jumpCount = 10
+
+left = False
+right = False
+walkCount = 0
+
+def gameWindow():
+    global walkCount
+
+    win.blit(bg, (0, 0))
+
+    if walkCount + 1 >= 27:
+        walkCount = 0
+
+    if left:
+        win.blit(walkLeft[walkCount//3], (x, y))
+        walkCount += 1
+    elif right:
+        win.blit(walkRight[walkCount//3], (x, y))
+        walkCount += 1
+    else:
+        win.blit(char, (x, y))
+        walkCount = 0
+
+    pygame.display.update()
+
+
 run = True
 while run:
-    pygame.time.delay(100)
+    clock.tick(27)
 
-    for event in pygame.event.get() :
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 #inputs to move character
@@ -26,30 +68,36 @@ while run:
 
     if keys[pygame.K_LEFT or pygame.K_a] and x > velocity:
         x -= velocity
-    if keys[pygame.K_RIGHT or pygame.K_d] and x < screen_width - width - velocity :
+        left = True
+        right = False
+    elif keys[pygame.K_RIGHT or pygame.K_d] and x < screen_width - width - velocity :
         x += velocity
-    if not (isJump):
-        if keys[pygame.K_UP or pygame.K_w] and y > velocity :
-            y -= velocity
-        if keys[pygame.K_DOWN or pygame.K_s] and y < screen_width - height - velocity:
-            y += velocity
-        if keys[pygame.K_SPACE] and y > velocity:
+        left = False
+        right = True
+    else:
+        right = False
+        left = False
+        walkCount = 0
+
+    if not(isJump):
+        if keys[pygame.K_SPACE]:
             isJump = True
+            right = False
+            left = False
+            walkCount = 0
     else:
         if jumpCount >= -10:
             neg = 1
             if jumpCount < 0:
                 neg = -1
-            y -= (jumpCount ** 2) * 0.2 * neg
+            y -= (jumpCount ** 2) * 0.5 * neg
             jumpCount -= 1
         else:
             isJump = False
             jumpCount = 10
 
-    win.fill((0, 0, 0))
+    gameWindow()
 
-    pygame.draw.rect(win, (255, 255, 255), (x, y, width, height))
-    pygame.display.update()
 
 
 pygame.quit()
