@@ -70,7 +70,7 @@ while run:
         x -= velocity
         left = True
         right = False
-    elif keys[pygame.K_RIGHT] and x < screen_width - width - velocity :
+    elif keys[pygame.K_RIGHT] and x < screen_width - width - velocity:
         x += velocity
         left = False
         right = True
@@ -101,3 +101,4 @@ while run:
 
 
 pygame.quit()
+#This is a test for my branch
