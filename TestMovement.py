@@ -1,23 +1,19 @@
 import pygame
 pygame.init()
 #window setup
-win = pygame.display.set_mode((500, 480))
+win = pygame.display.set_mode((500, 500))
 screen_width = 500
 #window name
 pygame.display.set_caption("Practice Game")
 #charachters location and values
-walkRight = [pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R1.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R2.png'),
-             pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R3.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R4.png'),
-             pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R5.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R6.png'),
-             pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R7.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R8.png'),
-             pygame.image.load(r'C:\Users\Riley\Downloads\sprites\R9.png')]
-walkLeft = [pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L1.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L2.png'),
-            pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L3.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L4.png'),
-            pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L5.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L6.png'),
-            pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L7.png'), pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L8.png'),
-            pygame.image.load(r'C:\Users\Riley\Downloads\sprites\L9.png')]
-bg = pygame.image.load(r'C:\Users\Riley\Downloads\sprites\dun.jpg')
-char = pygame.image.load(r'C:\Users\Riley\Downloads\sprites\standing.png')
+walkRight = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), pygame.image.load('R3.png'),
+             pygame.image.load('R4.png'), pygame.image.load('R5.png'), pygame.image.load('R6.png'),
+             pygame.image.load('R7.png'), pygame.image.load('R8.png'), pygame.image.load('R9.png')]
+walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.image.load('L3.png'),
+            pygame.image.load('L4.png'), pygame.image.load('L5.png'), pygame.image.load('L6.png'),
+            pygame.image.load('L7.png'), pygame.image.load('L8.png'), pygame.image.load('L9.png')]
+bg = pygame.image.load('bg.jpg')
+char = pygame.image.load('standing.png')
 
 
 x = 50
@@ -101,3 +97,5 @@ while run:
 
 
 pygame.quit()
+
+
