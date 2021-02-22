@@ -78,26 +78,28 @@ def gameWindow():
     if ewalkCount + 1 >= 16:
         ewalkCount = 0
     if enemyx < path[1]+enemyvelocity and enemyx != 200:
-        if x < enemyx and x - 20 != enemyx:
+        if x < enemyx and x != enemyx:
             enemyx -= enemyvelocity
            # print(enemyx, x)
             win.blit(enemyL[ewalkCount // 4], (enemyx, enemyy))
             ewalkCount += 1
     if enemyx < path[1]+enemyvelocity and enemyx != 200:
-        if x > enemyx and x + 20 != enemyx:
+        if x > enemyx and x != enemyx:
             enemyx += enemyvelocity
            # print(enemyx, x)
             win.blit(enemyR[ewalkCount // 4], (enemyx, enemyy))
             ewalkCount += 1
 
-        elif enemyx == x -20:
-            #win.blit(enemyLattack)
-            print("blam")
+    if enemyx -1 == x and enemyy == y:
+        #win.blit(enemyLattack//ewalkCount // 4)
+        print("blam")
 
-        elif enemyx == x + 20:
-            #win.blit(enemyRattack)
-            print("blam")
-
+    if enemyx + 1 == x and enemyy == y:
+        #win.blit(enemyRattack)
+        print("blamo")
+    if enemyx == x and enemyy == y:
+        run != True
+        print("You have died")
 
     pygame.display.update()
 
