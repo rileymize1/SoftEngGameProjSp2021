@@ -100,23 +100,16 @@ class enemy(object):
         if self.vel > 0:
             win.blit(self.enemyR[self.walkCount // 4], (self.x, self.y))
             self.walkCount += 1
-            print(self.x, self.vel, self.walkCount)
+            #print(self.x, self.vel, self.walkCount)
         else:
             win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
             self.walkCount += 1
-            print(self.x, self.vel, self.walkCount)
+            #print(self.x, self.vel, self.walkCount)
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
         pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)
 
     def move(self):
         self.x += self.vel
-        #if man.x >= self.path[0] and man.x <= self.path[1]:
-         #   print("I sense you")
-          #  if man.x <= self.x:
-           #     print("You are on my left")
-            #elif man.x >= self.x:
-             #   print("You are to my right")
-    #else:
         if self.x >= self.path[1]:
             self.vel = self.vel * -1
             self.walkCount = 0
@@ -141,13 +134,12 @@ def redrawGameWindow():
 # mainloop
 man = player(60, 410, 64, 64)
 goblin = enemy(100, 410, 64, 64, 300)
-bullets = []
 run = True
 while run:
     clock.tick(27)
     if man.hitbox[1] < goblin.hitbox[1]+goblin.hitbox[3] and man.hitbox[1]+ man.hitbox[3] > goblin.hitbox[1]:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
-                goblin.attack()
+                #goblin.attack()
                 man.hit()
 
 
