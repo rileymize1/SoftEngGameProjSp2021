@@ -39,7 +39,8 @@ class player(object):
     def draw(self, win):
         if self.walkCount + 1 >= 27:
             self.walkCount = 0
-
+        if self.y > 410:
+            self.y = 410
         if not (self.standing):
             if self.left:
                 win.blit(walkLeft[self.walkCount // 3], (self.x, self.y))
@@ -55,7 +56,6 @@ class player(object):
         self.hitbox = (self.x + 17, self.y + 11, 29, 52)
         pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)
     def hit(self):
-        print('hit')
         self.y = 410
         self.x = 60
         self.walkCount = 0
@@ -116,12 +116,6 @@ class enemy(object):
         elif self.x == self.path[0]:
             self.vel = self.vel*-1
             self.walkCount = 0
-    def attack(self):
-        if man.x < self.x:
-            win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
-        else:
-            win.blit(self.enemyRattack[self.walkCount // 4], (self.x, self.y))
-
 
 def redrawGameWindow():
     win.blit(bg, (0, 0))
@@ -139,7 +133,6 @@ while run:
     clock.tick(27)
     if man.hitbox[1] < goblin.hitbox[1]+goblin.hitbox[3] and man.hitbox[1]+ man.hitbox[3] > goblin.hitbox[1]:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
-                #goblin.attack()
                 man.hit()
 
 
