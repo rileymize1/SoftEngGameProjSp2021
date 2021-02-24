@@ -116,19 +116,19 @@ class enemy(object):
             self.walkCount = 0
         if man.x >= self.path[0] and man.x <= self.path[1]:
             if man.x <= self.x and man.y == self.y:
-                #print("I can sense you on my left")
+                print("moving left")
                 if self.vel > 0:
                     self.vel = self.vel * -1
 
             elif man.x >= self.x and man.y == self.y:
-                #print("I can feel you on my Right")
+                print("moving right")
                 if self.vel < 0:
                     self.vel = self.vel * -1
 
         else:
             self.walkPath()
     def walkPath(self):
-        #print("Patroling")
+        print("Patroling")
         if self.x >= self.path[1]:
             self.vel = self.vel * -1
             self.walkCount = 0
