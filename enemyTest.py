@@ -22,7 +22,7 @@ class enemy(object):
 goblin = enemy(100, 410, 64, 64, 300)
 run = True
 while run:
-    clock.tick(27)
+    #clock.tick(27)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

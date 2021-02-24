@@ -1,4 +1,6 @@
 import pygame
+exec(open('enemyTest.py').read())
+
 pygame.init()
 #window setup
 win = pygame.display.set_mode((500, 500))
@@ -14,7 +16,6 @@ walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.ima
             pygame.image.load('L7.png'), pygame.image.load('L8.png'), pygame.image.load('L9.png')]
 bg = pygame.image.load('bg.jpg')
 char = pygame.image.load('standing.png')
-
 
 x = 50
 y = 400
