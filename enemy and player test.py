@@ -19,7 +19,6 @@ walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.ima
 bg = pygame.image.load('bg.jpg')
 char = pygame.image.load('standing.png')
 
-
 class player(object):
     # characters location and values
     def __init__(self, x, y, width, height):
@@ -141,15 +140,12 @@ class enemy(object):
         else:
             win.blit(self.enemyRattack[self.walkCount // 4], (self.x, self.y))
 
-
 def redrawGameWindow():
     win.blit(bg, (0, 0))
     man.draw(win)
     goblin.draw(win)
 
     pygame.display.update()
-
-
 # mainloop
 man = player(200, 410, 64, 64)
 goblin = enemy(100, 410, 64, 64, 300)
@@ -161,7 +157,6 @@ while run:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
                 #goblin.attack()
                 man.hit()
-
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -205,6 +200,7 @@ while run:
         else:
             man.isJump = False
             man.jumpCount = 10
+
     redrawGameWindow()
 
 pygame.quit()
