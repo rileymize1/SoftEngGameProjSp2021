@@ -1,5 +1,5 @@
 import pygame
-exec(open('enemyTest.py').read())
+#exec(open('enemyTest.py').read())
 
 pygame.init()
 #window setup
