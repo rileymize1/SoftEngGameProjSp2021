@@ -82,7 +82,8 @@ class enemy(object):
     enemyRattack = [pygame.image.load('R9E.png'), pygame.image.load('R10E.png'), pygame.image.load('R11E.png')]
     enemyLattack = [pygame.image.load('L9E.png'), pygame.image.load('L10E.png'), pygame.image.load('L11E.png')]
 
-    def __init__(self, startx, y, width, height, end):
+    def __init__(self, startx, y, width, height, end, isalive):
+        self.alive = isalive
         self.start = startx
         self.x = startx
         self.y = y
@@ -93,18 +94,25 @@ class enemy(object):
         self.walkCount = 0
         self.vel = 3
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
+
+
     def draw(self, win):
-        self.move()
-        if self.walkCount >= 16:
-            self.walkCount = 0
-        if self.vel > 0:
-            win.blit(self.enemyR[self.walkCount // 4], (self.x, self.y))
-            self.walkCount += 1
+        if self.alive == True:
+            self.move()
+
+            if self.walkCount >= 16:
+                self.walkCount = 0
+            if self.vel > 0:
+                win.blit(self.enemyR[self.walkCount // 4], (self.x, self.y))
+                self.walkCount += 1
+            else:
+                win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
+                self.walkCount += 1
+            self.hitbox = (self.x + 17, self.y + 2, 31, 57)
+            pygame.draw.rect(win, (100, 22, 117), self.hitbox, 2)
         else:
-            win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
-            self.walkCount += 1
-        self.hitbox = (self.x + 17, self.y + 2, 31, 57)
-        pygame.draw.rect(win, (100, 22, 117), self.hitbox, 2)
+            self.hitbox = (0,0,0,0)
+
 
     def move(self):
         self.x += self.vel
@@ -152,7 +160,7 @@ def redrawGameWindow():
 
 # mainloop
 man = player(200, 410, 64, 64)
-goblin = enemy(100, 410, 64, 64, 300)
+goblin = enemy(100, 410, 64, 64, 300, True)
 bullets = []
 run = True
 while run:
