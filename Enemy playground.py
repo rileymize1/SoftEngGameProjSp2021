@@ -96,6 +96,7 @@ class enemy(object):
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
 
 
+
     def draw(self, win):
         if self.alive == True:
             self.move()
@@ -148,41 +149,84 @@ class enemy(object):
             win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
         else:
             win.blit(self.enemyRattack[self.walkCount // 4], (self.x, self.y))
+    def hit(self):
+        print("Hit")
+        self.alive = False
+class projectile(object):
+    def __init__(self, x, y, radius, color, facing):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.color = color
+        self.facing = facing
+        self.vel = 8 * facing
+
+    def draw(self, win):
+        pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
 
 
 def redrawGameWindow():
     win.blit(bg, (0, 0))
     man.draw(win)
     goblin.draw(win)
+    for bullet in bullets:
+        bullet.draw(win)
 
     pygame.display.update()
 
 
 # mainloop
 man = player(200, 410, 64, 64)
-goblin = enemy(100, 410, 64, 64, 300, True)
+goblin = enemy(100, 410, 64, 64, 450, True)
+shootLoop = 0
 bullets = []
 run = True
 while run:
     clock.tick(27)
-    if man.hitbox[1] < goblin.hitbox[1]+goblin.hitbox[3] and man.hitbox[1]+ man.hitbox[3] > goblin.hitbox[1]:
+    if man.hitbox[1] < goblin.hitbox[1] + goblin.hitbox[3] and man.hitbox[1] + man.hitbox[3] > goblin.hitbox[1]:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
-                #goblin.attack()
-                man.hit()
-
+            # goblin.attack()
+            man.hit()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
+    if shootLoop > 0:
+        shootLoop += 1
+    if shootLoop > 3:
+        shootLoop = 0
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+    for bullet in bullets:
+        if bullet.y - bullet.radius < goblin.hitbox[1] + goblin.hitbox[3] and bullet.y + bullet.radius > goblin.hitbox[
+            1]:
+            if bullet.x + bullet.radius > goblin.hitbox[0] and bullet.x - bullet.radius < goblin.hitbox[0] + \
+                    goblin.hitbox[2]:
+                goblin.hit()
+                bullets.pop(bullets.index(bullet))
+
+        if bullet.x < 500 and bullet.x > 0:
+            bullet.x += bullet.vel
+        else:
+            bullets.pop(bullets.index(bullet))
+
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_SPACE]:
+    if keys[pygame.K_SPACE] and shootLoop == 0:
         if man.left:
             facing = -1
         else:
             facing = 1
 
+        if len(bullets) < 5:
+            bullets.append(
+                projectile(round(man.x + man.width // 2), round(man.y + man.height // 2), 6, (0, 0, 0), facing))
+
+        shootLoop = 1
     if keys[pygame.K_LEFT] and man.x > man.vel:
         man.x -= man.vel
         man.left = True

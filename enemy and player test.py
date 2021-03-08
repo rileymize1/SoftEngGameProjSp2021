@@ -84,59 +84,84 @@ class projectile(object):
     def draw(self, win):
         pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
 
-
 class enemy(object):
-    walkRight = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'), pygame.image.load('R3E.png'),
-                 pygame.image.load('R4E.png'), pygame.image.load('R5E.png'), pygame.image.load('R6E.png'),
-                 pygame.image.load('R7E.png'), pygame.image.load('R8E.png'), pygame.image.load('R9E.png'),
-                 pygame.image.load('R10E.png'), pygame.image.load('R11E.png')]
-    walkLeft = [pygame.image.load('L1E.png'), pygame.image.load('L2E.png'), pygame.image.load('L3E.png'),
-                pygame.image.load('L4E.png'), pygame.image.load('L5E.png'), pygame.image.load('L6E.png'),
-                pygame.image.load('L7E.png'), pygame.image.load('L8E.png'), pygame.image.load('L9E.png'),
-                pygame.image.load('L10E.png'), pygame.image.load('L11E.png')]
+    enemyR = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'), pygame.image.load('R3E.png'),
+              pygame.image.load('R4E.png'), pygame.image.load('R5E.png'), pygame.image.load('R6E.png'),
+              pygame.image.load('R7E.png'), pygame.image.load('R8E.png')]
+    enemyL = [pygame.image.load('L1E.png'), pygame.image.load('L2E.png'), pygame.image.load('L3E.png'),
+              pygame.image.load('L4E.png'), pygame.image.load('L5E.png'), pygame.image.load('L6E.png'),
+              pygame.image.load('L7E.png'), pygame.image.load('L8E.png')]
+    enemyRattack = [pygame.image.load('R9E.png'), pygame.image.load('R10E.png'), pygame.image.load('R11E.png')]
+    enemyLattack = [pygame.image.load('L9E.png'), pygame.image.load('L10E.png'), pygame.image.load('L11E.png')]
 
-    def __init__(self, x, y, width, height, end, isalive):
+    def __init__(self, startx, y, width, height, end, isalive):
         self.alive = isalive
-        self.x = x
+        self.start = startx
+        self.x = startx
         self.y = y
         self.width = width
         self.height = height
         self.end = end
-        self.path = [self.x, self.end]
+        self.path = [self.start, self.end]
         self.walkCount = 0
         self.vel = 3
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
 
     def draw(self, win):
-        self.move()
-        if self.walkCount + 1 >= 33:
-            self.walkCount = 0
+        if self.alive == True:
+            self.move()
 
-        if self.vel > 0:
-            win.blit(self.walkRight[self.walkCount // 3], (self.x, self.y))
-            self.walkCount += 1
+            if self.walkCount >= 16:
+                self.walkCount = 0
+            if self.vel > 0:
+                win.blit(self.enemyR[self.walkCount // 4], (self.x, self.y))
+                self.walkCount += 1
+            else:
+                win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
+                self.walkCount += 1
+            self.hitbox = (self.x + 17, self.y + 2, 31, 57)
+            pygame.draw.rect(win, (100, 22, 117), self.hitbox, 2)
         else:
-            win.blit(self.walkLeft[self.walkCount // 3], (self.x, self.y))
-            self.walkCount += 1
-        self.hitbox = (self.x + 17, self.y + 2, 31, 57)
-        pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)
+            self.hitbox = (0, 0, 0, 0)
 
     def move(self):
-        if self.vel > 0:
-            if self.x + self.vel < self.path[1]:
-                self.x += self.vel
-            else:
-                self.vel = self.vel * -1
-                self.walkCount = 0
+        self.x += self.vel
+        if self.x < self.start:
+            self.x = self.start
+            self.walkCount = 0
+        if self.x > self.end:
+            self.x = self.end
+            self.walkCount = 0
+        if man.x >= self.path[0] and man.x <= self.path[1]:
+            if man.x <= self.x and man.y == self.y:
+                if self.vel > 0:
+                    self.vel = self.vel * -1
+
+            elif man.x >= self.x and man.y == self.y:
+                if self.vel < 0:
+                    self.vel = self.vel * -1
+
         else:
-            if self.x - self.vel > self.path[0]:
-                self.x += self.vel
-            else:
-                self.vel = self.vel * -1
-                self.walkCount = 0
+            self.walkPath()
+
+    def walkPath(self):
+        if self.x >= self.path[1]:
+            self.vel = self.vel * -1
+            self.walkCount = 0
+        elif self.x == self.path[0]:
+            self.vel = self.vel * -1
+            self.walkCount = 0
+
+    def attack(self):
+        if man.x < self.x:
+            win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
+        else:
+            win.blit(self.enemyRattack[self.walkCount // 4], (self.x, self.y))
 
     def hit(self):
         print('hit')
+        self.alive = False
+
 
 
 def redrawGameWindow():
