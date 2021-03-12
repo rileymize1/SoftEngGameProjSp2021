@@ -1,4 +1,5 @@
 import pygame
+import time
 
 pygame.init()
 run = True
@@ -152,6 +153,21 @@ class enemy(object):
     def hit(self):
         print("Hit")
         self.alive = False
+        self.tod = pygame.time.get_ticks()
+        self.ressurect()
+        #Ressurect while loop holds code until it hits it's mark and the goblin is brought back. In game it looks like how I imagine fighting zawardo would feel.
+        #I have inadvertantly created the world and I don't know how to take it
+    def ressurect(self):
+        print("Begining Necromancy")
+        self.passingTime = 0
+        while(self.passingTime < 3000):
+            self.passingTime = pygame.time.get_ticks() - self.tod
+            print(self.passingTime)
+        self.passedTime = self.passingTime
+        if(self.passedTime >= 3000):
+            #print(self.passedTime)
+            print("He is reborn")
+            self.alive = True
 class projectile(object):
     def __init__(self, x, y, radius, color, facing):
         self.x = x
@@ -202,8 +218,7 @@ while run:
             run = False
 
     for bullet in bullets:
-        if bullet.y - bullet.radius < goblin.hitbox[1] + goblin.hitbox[3] and bullet.y + bullet.radius > goblin.hitbox[
-            1]:
+        if bullet.y - bullet.radius < goblin.hitbox[1] + goblin.hitbox[3] and bullet.y + bullet.radius > goblin.hitbox[1]:
             if bullet.x + bullet.radius > goblin.hitbox[0] and bullet.x - bullet.radius < goblin.hitbox[0] + \
                     goblin.hitbox[2]:
                 goblin.hit()
