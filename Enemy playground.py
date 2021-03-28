@@ -96,6 +96,7 @@ class enemy(object):
         self.vel = 3
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
         self.tod = 0
+        self.hitcount = 0
 
 
 
@@ -153,8 +154,11 @@ class enemy(object):
             win.blit(self.enemyRattack[self.walkCount // 4], (self.x, self.y))
     def hit(self):
         print("Hit")
-        self.alive = False
-        self.ressurect()
+        self.hitcount = self.hitcount + 1
+        print(self.hitcount)
+        if(self.hitcount >= 3):
+            self.alive = False
+            self.ressurect()
     def ressurect(self):
         print("Begining Necromancy")
         self.currentTime = pygame.time.get_ticks()
@@ -190,7 +194,7 @@ def redrawGameWindow():
 
 
 # mainloop
-man = player(200, 410, 64, 64)
+man = player(50, 410, 64, 64)
 goblin = enemy(100, 410, 64, 64, 450, True)
 shootLoop = 0
 bullets = []
@@ -201,6 +205,7 @@ while run:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
             # goblin.attack()
             man.hit()
+            goblin.hitcount = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -236,7 +241,7 @@ while run:
         else:
             facing = 1
 
-        if len(bullets) < 5:
+        if len(bullets) < 2:
             bullets.append(
                 projectile(round(man.x + man.width // 2), round(man.y + man.height // 2), 6, (0, 0, 0), facing))
 

@@ -52,7 +52,6 @@ class player(object):
             else:
                 win.blit(walkLeft[0], (self.x, self.y))
         self.hitbox = (self.x + 17, self.y + 11, 29, 52)
-        pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)
 
     def hit(self):
         self.y = 410
@@ -106,6 +105,7 @@ class enemy(object):
         self.walkCount = 0
         self.vel = 3
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
+        self.hitcount = 0
 
     def draw(self, win):
         if self.alive == True:
@@ -120,7 +120,6 @@ class enemy(object):
                 win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
                 self.walkCount += 1
             self.hitbox = (self.x + 17, self.y + 2, 31, 57)
-            pygame.draw.rect(win, (100, 22, 117), self.hitbox, 2)
         else:
             self.hitbox = (0, 0, 0, 0)
 
@@ -160,7 +159,11 @@ class enemy(object):
 
     def hit(self):
         print('hit')
-        self.alive = False
+        self.hitcount = self.hitcount + 1
+        print(self.hitcount)
+        if (self.hitcount >= 3):
+            self.alive = False
+            self.alive = False
 
 
 
@@ -175,7 +178,7 @@ def redrawGameWindow():
 
 
 # mainloop
-man = player(200, 410, 64, 64)
+man = player(50, 410, 64, 64)
 goblin = enemy(100, 410, 64, 64, 450, True)
 shootLoop = 0
 bullets = []
@@ -186,6 +189,7 @@ while run:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
             # goblin.attack()
             man.hit()
+            goblin.hitcount = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
