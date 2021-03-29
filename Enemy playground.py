@@ -136,19 +136,19 @@ class enemy(object):
             self.walkCount = 0
         if man.x >= self.path[0] and man.x <= self.path[1]:
             if man.x <= self.x and man.y == self.y:
-                print("moving left")
+                #print("moving left")
                 if self.vel > 0:
                     self.vel = self.vel * -1
 
             elif man.x >= self.x and man.y == self.y:
-                print("moving right")
+                #print("moving right")
                 if self.vel < 0:
                     self.vel = self.vel * -1
 
         else:
             self.walkPath()
     def walkPath(self):
-        print("Patroling")
+        #print("Patroling")
         if self.x >= self.path[1]:
             self.vel = self.vel * -1
             self.walkCount = 0
@@ -161,11 +161,11 @@ class enemy(object):
         else:
             win.blit(self.enemyRattack[self.walkCount // 4], (self.x, self.y))
     def hit(self):
-        print("Hit")
+        #print("Hit")
         hitSound.play()
         self.hitcount = self.hitcount + 1
         print(self.hitcount)
-        if(self.hitcount >= 3):
+        if(self.hitcount >= 4):
             self.alive = False
             self.ressurect()
     def ressurect(self):
