@@ -17,6 +17,12 @@ char = pygame.image.load('standing.png')
 
 clock = pygame.time.Clock()
 
+bulletSound = pygame.mixer.Sound('bulletS.wav')
+hitSound = pygame.mixer.Sound('hitS.wav')
+music = pygame.mixer.music.load('music.mp3')
+pygame.mixer.music.play(-1)
+
+score = 0
 
 class player(object):
     def __init__(self, x, y, width, height):
@@ -186,6 +192,7 @@ while run:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
             # goblin.attack()
             man.hit()
+            score -= 5
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -205,7 +212,9 @@ while run:
             1]:
             if bullet.x + bullet.radius > goblin.hitbox[0] and bullet.x - bullet.radius < goblin.hitbox[0] + \
                     goblin.hitbox[2]:
+                hitSound.play()
                 goblin.hit()
+                score += 1
                 bullets.pop(bullets.index(bullet))
 
         if bullet.x < 500 and bullet.x > 0:
@@ -216,6 +225,7 @@ while run:
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_SPACE] and shootLoop == 0:
+        bulletSound.play()
         if man.left:
             facing = -1
         else:
