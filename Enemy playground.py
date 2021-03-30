@@ -27,7 +27,7 @@ score = 0
 bulletSound = pygame.mixer.Sound('bulletS.wav')
 hitSound = pygame.mixer.Sound('hitS.wav')
 music = pygame.mixer.music.load('music.mp3')
-pygame.mixer.music.play(-1)
+#pygame.mixer.music.play(-1)
 
 class player(object):
     # characters location and values
@@ -111,7 +111,7 @@ class enemy(object):
     def draw(self, win):
         if self.alive == True:
             self.move()
-
+            pygame.draw.line(win, (0, 0, 255), (0, 0), (639, 479))
             if self.walkCount >= 16:
                 self.walkCount = 0
             if self.vel > 0:
@@ -179,6 +179,12 @@ class enemy(object):
             print(self.passedTime)
             print("He is reborn")
             self.alive = True
+    def drawEnemyHealth(self):
+        pygame.draw.line(win, (100, 22, 117),self.x,self.x+10,2)
+        font1 = pygame.font.SysFont('comicsans', 30)
+       # enemyHealth = font1.render("Score: " + str(score), 1, (100, 22, 117))
+        #win.blit(enemyHealth, (50, 150))
+
 class projectile(object):
     def __init__(self, x, y, radius, color, facing):
         self.x = x
