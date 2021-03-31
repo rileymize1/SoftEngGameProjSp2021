@@ -111,7 +111,7 @@ class enemy(object):
         self.walkCount = 0
         self.vel = 3
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
-        self.hitcount = 0
+        self.enemyHealth = 12
 
     def draw(self, win):
         if self.alive == True:
@@ -125,6 +125,8 @@ class enemy(object):
             else:
                 win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
                 self.walkCount += 1
+            pygame.draw.rect(win, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))
+            pygame.draw.rect(win, (0, 128, 0), (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.enemyHealth)), 10))
             self.hitbox = (self.x + 17, self.y + 2, 31, 57)
         else:
             self.hitbox = (0, 0, 0, 0)
@@ -165,8 +167,8 @@ class enemy(object):
 
     def hit(self):
         print('hit')
-        self.hitcount += 1
-        if(self.hitcount >= 4):
+        self.enemyHealth -= 3
+        if(self.enemyHealth <= 0):
             self.alive = False
 
 def writeScore():
@@ -197,7 +199,7 @@ while run:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
             man.hit()
             score -= 5
-            goblin.hitcount = 0
+            goblin.enemyHealth = 12
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

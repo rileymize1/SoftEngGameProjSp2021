@@ -104,7 +104,7 @@ class enemy(object):
         self.vel = 3
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
         self.tod = 0
-        self.hitcount = 0
+        self.health = 12
 
 
 
@@ -120,6 +120,9 @@ class enemy(object):
             else:
                 win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
                 self.walkCount += 1
+            pygame.draw.rect(win, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))
+            pygame.draw.rect(win, (0, 128, 0), (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))
+            #https://www.techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/scoring-health-bars/
             self.hitbox = (self.x + 17, self.y + 2, 31, 57)
             pygame.draw.rect(win, (100, 22, 117), self.hitbox, 2)
         else:
@@ -163,9 +166,9 @@ class enemy(object):
     def hit(self):
         #print("Hit")
         hitSound.play()
-        self.hitcount = self.hitcount + 1
-        print(self.hitcount)
-        if(self.hitcount >= 4):
+        self.health -= 4
+        print(self.health)
+        if(self.health <= 0):
             self.alive = False
             self.ressurect()
     def ressurect(self):
@@ -179,11 +182,6 @@ class enemy(object):
             print(self.passedTime)
             print("He is reborn")
             self.alive = True
-    def drawEnemyHealth(self):
-        pygame.draw.line(win, (100, 22, 117),self.x,self.x+10,2)
-        font1 = pygame.font.SysFont('comicsans', 30)
-       # enemyHealth = font1.render("Score: " + str(score), 1, (100, 22, 117))
-        #win.blit(enemyHealth, (50, 150))
 
 class projectile(object):
     def __init__(self, x, y, radius, color, facing):
@@ -225,7 +223,7 @@ while run:
     if man.hitbox[1] < goblin.hitbox[1] + goblin.hitbox[3] and man.hitbox[1] + man.hitbox[3] > goblin.hitbox[1]:
         if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
             man.hit()
-            goblin.hitcount = 0
+            goblin.health = 12
             writeScore()
             score -= 2
 
