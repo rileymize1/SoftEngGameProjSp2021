@@ -109,9 +109,8 @@ class enemy(object):
 
 
     def draw(self, win):
-        if self.alive == True:
+        if self.health >0:
             self.move()
-            pygame.draw.line(win, (0, 0, 255), (0, 0), (639, 479))
             if self.walkCount >= 16:
                 self.walkCount = 0
             if self.vel > 0:
@@ -121,7 +120,7 @@ class enemy(object):
                 win.blit(self.enemyL[self.walkCount // 4], (self.x, self.y))
                 self.walkCount += 1
             pygame.draw.rect(win, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))
-            pygame.draw.rect(win, (0, 128, 0), (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))
+            pygame.draw.rect(win, (66, 245, 144), (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))
             #https://www.techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/scoring-health-bars/
             self.hitbox = (self.x + 17, self.y + 2, 31, 57)
             pygame.draw.rect(win, (100, 22, 117), self.hitbox, 2)
@@ -166,8 +165,7 @@ class enemy(object):
     def hit(self):
         #print("Hit")
         hitSound.play()
-        self.health -= 4
-        print(self.health)
+        self.health -= 3
         if(self.health <= 0):
             self.alive = False
             self.ressurect()
@@ -175,13 +173,14 @@ class enemy(object):
         print("Begining Necromancy")
         self.currentTime = pygame.time.get_ticks()
         self.passedTime = self.currentTime - self.tod
-        print(self.tod)
+        #print(self.tod)
         print(self.passedTime)
-        print(self.currentTime)
-        if(self.passedTime >= self.tod+5000):
+        #print(self.currentTime)
+        if(self.passedTime != self.tod):
             print(self.passedTime)
             print("He is reborn")
             self.alive = True
+            self.health = 12
 
 class projectile(object):
     def __init__(self, x, y, radius, color, facing):
