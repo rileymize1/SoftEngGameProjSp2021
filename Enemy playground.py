@@ -105,6 +105,7 @@ class enemy(object):
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
         self.tod = 0
         self.health = 12
+        self.respawnTries = 0
 
 
 
@@ -167,20 +168,30 @@ class enemy(object):
         hitSound.play()
         self.health -= 3
         if(self.health <= 0):
+            print("Time of Death ", self.tod)
             self.alive = False
             self.ressurect()
-    def ressurect(self):
-        print("Begining Necromancy")
+    def timering(self):
         self.currentTime = pygame.time.get_ticks()
         self.passedTime = self.currentTime - self.tod
-        #print(self.tod)
-        print(self.passedTime)
-        #print(self.currentTime)
-        if(self.passedTime != self.tod):
-            print(self.passedTime)
+        #print(self.passedTime)
+        print(self.currentTime)
+        if self.currentTime >= self.tod + 300:
+            return True
+        else:
+            return False
+
+    def ressurect(self):
+        print("Begining Necromancy")
+        self.testBool  = self.timering()
+        if (self.testBool == True):
             print("He is reborn")
             self.alive = True
             self.health = 12
+        elif(self.testBool == False):
+            self.timering()
+            print("it is not his time")
+            self.ressurect()
 
 class projectile(object):
     def __init__(self, x, y, radius, color, facing):
@@ -232,7 +243,7 @@ while run:
 
     if shootLoop > 0:
         shootLoop += 1
-    if shootLoop > 3:
+    if shootLoop > 5:
         shootLoop = 0
 
     for event in pygame.event.get():
@@ -262,7 +273,7 @@ while run:
         else:
             facing = 1
 
-        if len(bullets) < 2:
+        if len(bullets) < 5:
             bullets.append(
                 projectile(round(man.x + man.width // 2), round(man.y + man.height // 2), 6, (0, 0, 0), facing))
 
