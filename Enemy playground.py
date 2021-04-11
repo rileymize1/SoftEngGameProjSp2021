@@ -176,10 +176,11 @@ class enemy(object):
         self.passedTime = self.currentTime - self.tod
         #print(self.passedTime)
         print(self.currentTime)
-        if self.currentTime >= self.tod + 300:
+        if(self.currentTime >= self.tod *2):
             return True
         else:
-            return False
+            print("drat")
+            self.timering
 
     def ressurect(self):
         print("Begining Necromancy")
