@@ -1,3 +1,5 @@
+import random
+
 import pygame
 import time
 
@@ -82,6 +84,7 @@ class player(object):
                     i = 301
                     pygame.quit()
 class enemy(object):
+
     enemyR = [pygame.image.load('R1E.png'), pygame.image.load('R2E.png'), pygame.image.load('R3E.png'),
               pygame.image.load('R4E.png'), pygame.image.load('R5E.png'), pygame.image.load('R6E.png'),
               pygame.image.load('R7E.png'), pygame.image.load('R8E.png')]
@@ -107,7 +110,7 @@ class enemy(object):
         self.health = 12
         self.respawnTries = 0
 
-
+        enemy.hitbox = (self.x + 17, self.y + 2, 31, 57)
 
     def draw(self, win):
         if self.health >0:
@@ -169,30 +172,33 @@ class enemy(object):
         self.health -= 3
         if(self.health <= 0):
             print("Time of Death ", self.tod)
+            self.currentTime = pygame.time.get_ticks()
             self.alive = False
-            self.ressurect()
+       #     self.ressurect()
     def timering(self):
-        self.currentTime = pygame.time.get_ticks()
         self.passedTime = self.currentTime - self.tod
         #print(self.passedTime)
         print(self.currentTime)
-        if(self.currentTime >= self.tod *2):
-            return True
-        else:
-            print("drat")
-            self.timering
+        print("needs: ", self.tod *2)
+        while(self.currentTime <= self.tod *.5):
+            self.curentTime += 100
+            print("running while loop")
+            if(self.currentTime >= self.tod ):
+                return True
+        #else:
+        #    print("drat")
+         #   self.timering()
 
-    def ressurect(self):
-        print("Begining Necromancy")
-        self.testBool  = self.timering()
-        if (self.testBool == True):
-            print("He is reborn")
-            self.alive = True
-            self.health = 12
-        elif(self.testBool == False):
-            self.timering()
-            print("it is not his time")
-            self.ressurect()
+    #def ressurect(self):
+        #print("Begining Necromancy")
+        #self.timeBool  = self.timering()
+        #if (self.timeBool == True):
+       #     print("He is reborn")
+       #     self.alive = True
+      #      self.health = 12
+       # elif(self.timeBool == False):
+      #      print("it is not his time")
+      #      self.ressurect()
 
 class projectile(object):
     def __init__(self, x, y, radius, color, facing):
@@ -214,6 +220,8 @@ def writeScore():
 def redrawGameWindow():
     win.blit(bg, (0, 0))
     man.draw(win)
+    for enemy in enemies:
+        enemy.draw(win)
     goblin.draw(win)
     writeScore()
     for bullet in bullets:
@@ -227,14 +235,20 @@ man = player(50, 410, 64, 64)
 goblin = enemy(100, 410, 64, 64, 450, True)
 shootLoop = 0
 bullets = []
+
+enemies = []
+maxenemies = 1
+for i in range(maxenemies):
+    enemies.append(goblin)#enemy(random.randint(100,450), 410, 64, 64, 450, True))
+
 run = True
 while run:
     clock.tick(27)
 
-    if man.hitbox[1] < goblin.hitbox[1] + goblin.hitbox[3] and man.hitbox[1] + man.hitbox[3] > goblin.hitbox[1]:
-        if man.hitbox[0] + man.hitbox[2] > goblin.hitbox[0] and man.hitbox[0] < goblin.hitbox[0] + goblin.hitbox[2]:
+    if man.hitbox[1] < enemy.hitbox[1] + enemy.hitbox[3] and man.hitbox[1] + man.hitbox[3] > enemy.hitbox[1]:
+        if man.hitbox[0] + man.hitbox[2] > enemy.hitbox[0] and man.hitbox[0] < enemy.hitbox[0] + enemy.hitbox[2]:
             man.hit()
-            goblin.health = 12
+            enemy.health = 12
             writeScore()
             score -= 2
 
@@ -252,11 +266,11 @@ while run:
             run = False
 
     for bullet in bullets:
-        if bullet.y - bullet.radius < goblin.hitbox[1] + goblin.hitbox[3] and bullet.y + bullet.radius > goblin.hitbox[1]:
-            if bullet.x + bullet.radius > goblin.hitbox[0] and bullet.x - bullet.radius < goblin.hitbox[0] + \
-                    goblin.hitbox[2]:
+        if bullet.y - bullet.radius < enemy.hitbox[1] + enemy.hitbox[3] and bullet.y + bullet.radius > enemy.hitbox[1]:
+            if bullet.x + bullet.radius > enemy.hitbox[0] and bullet.x - bullet.radius < enemy.hitbox[0] + \
+                    enemy.hitbox[2]:
                 goblin.hit()
-                goblin.tod = pygame.time.get_ticks()
+                enemy.tod = pygame.time.get_ticks()
                 score += 3
                 bullets.pop(bullets.index(bullet))
 
