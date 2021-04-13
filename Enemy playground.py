@@ -47,6 +47,7 @@ class player(object):
         self.standing = True
         self.hitbox = (self.x + 17, self.y + 11, 29, 52)
         self.score = score
+        self.health = 100
 
     def draw(self, win):
         if self.walkCount + 1 >= 27:
@@ -67,14 +68,22 @@ class player(object):
                 win.blit(walkLeft[0], (self.x, self.y))
         self.hitbox = (self.x + 17, self.y + 11, 29, 52)
         pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)
+        pygame.draw.rect(win, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))
+        pygame.draw.rect(win, (66, 245, 144), (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))
+        # https://www.techwithtim.net/tutorials/game-development-with-python/pygame-tutorial/scoring-health-bars/
+
     def hit(self):
         self.y = 410
-        self.x = 60
+        if self.x < goblin.x:
+            self.x -= 40
+        if self.x > goblin.x:
+            self.x += 40
         self.walkCount = 0
         font1 = pygame.font.SysFont('comicsans', 30)
         text = font1.render('Hit', 1, (100, 22, 117))
         win.blit(text, (self.x, self.y+10))
         pygame.display.update()
+        self.health -= 20
         i = 0
         while i < 100:
             pygame.time.delay(10)
